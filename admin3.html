@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Wedding Invitation</title>
+  <style>
+    /* Reset some basic styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f1f1f1;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-section {
+      margin-bottom: 30px;
+    }
+
+    .login-section input {
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 80%;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .login-section button {
+      padding: 12px 24px;
+      background-color: #6e4b3c;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-section button:hover {
+      background-color: #5a4132;
+    }
+
+    /* Scrollable Records Section */
+    .scrollable {
+      margin-top: 20px;
+      height: 300px;  /* Adjust the height based on the number of records */
+      overflow-y: auto; /* Enables vertical scrolling */
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+
+    .record {
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .record:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Admin Login Section -->
+    <div class="login-section" id="login-section">
+      <h2>Admin Login</h2>
+      <input type="text" id="admin-username" placeholder="Username (e.g., yash2026)" required>
+      <input type="password" id="admin-password" placeholder="Password" required>
+      <button id="login-button">Login</button>
+    </div>
+
+    <!-- Scrollable records section (For displaying records like attendees) -->
+    <div class="scrollable" id="record-container" style="display: none;">
+      <!-- Fetched records will be dynamically added here -->
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwsYufFnaWi8abdHBnpkX26Fl-_rjjql0",
+      authDomain: "shadi-282f3.firebaseapp.com",
+      projectId: "shadi-282f3",
+      storageBucket: "shadi-282f3.firebasestorage.app",
+      messagingSenderId: "560917273677",
+      appId: "1:560917273677:web:c5aa02266f9cb889f15004",
+      measurementId: "G-W18QW62RG1"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Admin Login Function
+    function login() {
+      const username = document.getElementById('admin-username').value;
+      const password = document.getElementById('admin-password').value;
+
+      // Hardcoded credentials
+      if (username === "yash2026" && password === "12345678@") {
+        // Store login status in localStorage
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        // After successful login, fetch and show the records
+        loadRecords();
+        document.getElementById('login-section').style.display = 'none'; // Hide login section
+        document.getElementById('record-container').style.display = 'block'; // Show records
+      } else {
+        alert("Incorrect username or password.");
+      }
+    }
+
+    // Attach event listener to the login button
+    document.getElementById('login-button').addEventListener('click', login);
+
+    // Fetch and display records from Firestore (example)
+    async function loadRecords() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "attendees"));
+        const recordsContainer = document.getElementById("record-container");
+
+        // Clear any existing records
+        recordsContainer.innerHTML = '';
+
+        querySnapshot.forEach((doc) => {
+          const recordData = doc.data();
+          const recordElement = document.createElement("div");
+          recordElement.classList.add("record");
+          recordElement.innerText = `${recordData.name} - ${recordData.date}`;
+          recordsContainer.appendChild(recordElement);
+        });
+
+        if (querySnapshot.empty) {
+          recordsContainer.innerHTML = "<p>No records found.</p>";
+        }
+      } catch (error) {
+        console.error("Error fetching documents: ", error);
+      }
+    }
+  </script>
+</body>
+</html>

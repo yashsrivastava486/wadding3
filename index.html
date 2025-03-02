@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation</title>
+  <style>
+    /* Reset some basic styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f7a7b4, #f1c8e0);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+    }
+
+    .card-header h1 {
+      font-size: 40px;
+      color: #c76e6e;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .card-header h2 {
+      font-size: 32px;
+      color: #6e4b3c;
+      margin-top: 10px;
+    }
+
+    .card-body p {
+      font-size: 18px;
+      color: #333;
+      margin: 20px 0;
+    }
+
+    .ceremony-details {
+      margin-top: 30px;
+    }
+
+    .ceremony-details h3 {
+      font-size: 24px;
+      color: #c76e6e;
+    }
+
+    .ceremony-details table {
+      width: 100%;
+      margin-top: 15px;
+      border-collapse: collapse;
+    }
+
+    .ceremony-details td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .ceremony-details td strong {
+      color: #c76e6e;
+      font-weight: bold;
+    }
+
+    .input-section {
+      margin-top: 40px;
+    }
+
+    .input-section input {
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 80%;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .input-section input:focus {
+      border-color: #c76e6e;
+    }
+
+    .input-section button {
+      padding: 12px 24px;
+      background-color: #c76e6e;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-section button:hover {
+      background-color: #a65c56;
+    }
+
+    .admin-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .admin-btn button {
+      padding: 10px 15px;
+      background-color: #6e4b3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .admin-btn button:hover {
+      background-color: #5a4132;
+    }
+
+    /* Add some fancy animations */
+    .card-header h1, .card-header h2 {
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .card-body p {
+      animation: fadeInUp 2s ease-in-out;
+    }
+
+    .ceremony-details table {
+      animation: slideIn 2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateX(-50px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Wedding Welcome Card -->
+    <div class="card">
+      <div class="card-header">
+        <h1>Welcome to the Wedding</h1>
+        <h2>Rahul Srivastava & Divya Srivastava</h2>
+      </div>
+      <div class="card-body">
+        <p>We are delighted to invite you to celebrate the union of two souls. Your presence will make the day even more special!</p>
+      </div>
+    </div>
+
+    <!-- Ceremony Table -->
+    <div class="ceremony-details">
+      <h3>Ceremony Details:</h3>
+      <table>
+        <tr>
+          <td><strong>Wedding:</strong></td>
+          <td>13 April 2025 (Sunday)</td>
+          <td>Venue: Vaniyu, Prayagraj</td>
+        </tr>
+        <tr>
+          <td><strong>Reception:</strong></td>
+          <td>16 April 2025</td>
+          <td>Venue: Rampur</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Input Section for Name and Date -->
+    <div class="input-section">
+      <h3>When are you coming?</h3>
+      <form id="attendance-form">
+        <input type="text" id="name" placeholder="Enter your name" required>
+        <input type="date" id="date" required>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <!-- Admin Button (Corner) -->
+    <div class="admin-btn">
+      <button onclick="window.location.href='admin.html'">Admin</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwsYufFnaWi8abdHBnpkX26Fl-_rjjql0",
+      authDomain: "shadi-282f3.firebaseapp.com",
+      projectId: "shadi-282f3",
+      storageBucket: "shadi-282f3.firebasestorage.app",
+      messagingSenderId: "560917273677",
+      appId: "1:560917273677:web:c5aa02266f9cb889f15004",
+      measurementId: "G-W18QW62RG1"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // Handle form submission and store data in Firestore
+    document.getElementById('attendance-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const date = document.getElementById('date').value;
+
+      if (name && date) {
+        try {
+          // Add data to Firestore
+          const docRef = await addDoc(collection(db, "attendees"), {
+            name: name,
+            date: date,
+            createdAt: new Date()
+          });
+          alert(`Thank you, ${name}! You have confirmed your attendance for the wedding on ${date}.`);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>
